@@ -2,34 +2,38 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Grid : MonoBehaviour
+public class Grid<T>
 {
-    [SerializeField] private Color _baseColor;
-    [SerializeField] private Color _offsetColor;
-    [SerializeField] private SpriteRenderer _sprite;
-    [SerializeField] private GameObject _highlight;
+    private int _cellSize;
 
-    public void Init(bool isOffset)
+    public T[,] _grid;
+
+    public void SetItem(Vector2Int gridPosition, T item)
     {
-        if(isOffset)
-        {
-            _sprite.color = _offsetColor;
-        }
-        else
-        {
-            _sprite.color = _baseColor;
-        }
+        _grid[gridPosition.x, gridPosition.y] = item;
     }
 
-    void OnMouseEnter()
+    public T GetItem(Vector2Int gridPosition)
     {
-        _highlight.SetActive(true);
+        return _grid[gridPosition.x, gridPosition.y];
     }
 
-    void OnMouseExit()
+    public Grid(T[,] grid, int cellSize)
     {
-        _highlight.SetActive(false);
+        _grid = grid;
+        _cellSize = cellSize;
     }
 
+    public Vector3 GridToWorldPosition(Vector2Int gridPosition)
+    {
+        return new Vector3(gridPosition.x, gridPosition.y) * _cellSize;
+    }
 
+    public Vector2Int WorldToGridPosition(Vector3 worldPosition)
+    {
+        int x = Mathf.FloorToInt(worldPosition.x / _cellSize);
+        int y = Mathf.FloorToInt(worldPosition.y / _cellSize);
+
+        return new Vector2Int(x,y);
+    }
 }
