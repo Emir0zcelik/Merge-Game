@@ -34,7 +34,7 @@ public class Enemy : MonoBehaviour
     }
     public void EnemyTakeDamage()
     {
-        _currentHealth--;
+
     }
     public void EnemyDeath()
     {
