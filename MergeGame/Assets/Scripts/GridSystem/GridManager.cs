@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class GridManager : MonoBehaviour
@@ -9,6 +10,7 @@ public class GridManager : MonoBehaviour
     [SerializeField] private Camera _camera;
 
     [SerializeField] private GameObject _tileBackground;
+    [SerializeField] private GameObject _debugTileData;
 
     [SerializeField] private Color orginalColor;
     [SerializeField] private Color offSetColor;
@@ -18,15 +20,8 @@ public class GridManager : MonoBehaviour
         InitizalizeGrid();
     }
 
-    private void Update()
+    private void Start()
     {
-        Vector3 cameraOffset = new Vector3(0, 0, (new Vector3(0, 0, 0) - _camera.transform.position).magnitude);
-
-        Vector3 worldPoint = _camera.ScreenToWorldPoint(Input.mousePosition + cameraOffset);
-        Vector2Int gridPosition = _floorGrid.WorldToGridPosition(worldPoint);
-
-
-
         for (int x = 0; x < _floorGrid._grid.GetLength(0); x++)
         {
             for (int y = 0; y < _floorGrid._grid.GetLength(1); y++)
@@ -51,9 +46,21 @@ public class GridManager : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        Vector3 cameraOffset = new Vector3(0, 0, (new Vector3(0, 0, 0) - _camera.transform.position).magnitude);
+
+        Vector3 worldPoint = _camera.ScreenToWorldPoint(Input.mousePosition + cameraOffset);
+        Vector2Int gridPosition = _floorGrid.WorldToGridPosition(worldPoint);
+
+
+
+
+    }
+
     private void InitizalizeGrid()
     {
-        _floorGrid = new Grid<FloorTile>(new FloorTile[10, 10], 1);
+        _floorGrid = new Grid<FloorTile>(new FloorTile[6, 6], 3);
 
         FloorTile floorTile = new FloorTile();
     }

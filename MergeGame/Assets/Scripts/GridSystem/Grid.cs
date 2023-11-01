@@ -1,5 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using Unity.VisualScripting;
+using UnityEditor.Build;
 using UnityEngine;
 
 public class Grid<T>
@@ -41,4 +44,11 @@ public class Grid<T>
     {
         return new Vector3(_grid.GetLength(0) * _cellSize * 0.5f, _grid.GetLength(1) * _cellSize * 0.5f, 0);
     }
+
+    public bool IsClicked(out RaycastHit hit)
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        return Physics.Raycast(ray, out hit);
+    }
+
 }
