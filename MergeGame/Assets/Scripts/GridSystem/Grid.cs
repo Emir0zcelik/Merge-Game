@@ -34,6 +34,11 @@ public class Grid<T>
         int x = Mathf.FloorToInt(worldPosition.x / _cellSize);
         int y = Mathf.FloorToInt(worldPosition.y / _cellSize);
 
-        return new Vector2Int(x,y);
+        return new Vector2Int(x, y);
+    }
+
+    public Vector3 GetCenterPosition()
+    {
+        return new Vector3(_grid.GetLength(0) * _cellSize * 0.5f, _grid.GetLength(1) * _cellSize * 0.5f, 0);
     }
 }
