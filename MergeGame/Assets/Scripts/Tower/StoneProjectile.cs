@@ -2,14 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IceTower : Tower
+public class StoneProjectile : MonoBehaviour
 {
+    [SerializeField] int damage;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Enemy"))
         {
-            other.GetComponent<Enemy>().Speed = 1f;
+            other.GetComponent<Enemy>().TakeDamage(damage);
         }
     }
 }

@@ -4,17 +4,13 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] float speed = 2f;
+    [SerializeField] float speed = 3f;
+    public float Speed { get { return speed; } set { speed = value; } }
 
     [Header("Health")]
-    [SerializeField] int maxHealth = 3;
-    private int _currentHealth = 0;
-    public int CurrentHealth { get; set; }
+    [SerializeField] int _health = 3;
 
-    private void Start()
-    {
-        _currentHealth = maxHealth;
-    }
+
 
 
     void Update()
@@ -24,15 +20,15 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        _currentHealth -= damage;
-        EnemyTakeDamage();
+        _health -= damage;
+        EnemyHurt();
 
-        if (_currentHealth <= 0)
+        if (_health <= 0)
         {
             EnemyDeath();
         }
     }
-    public void EnemyTakeDamage()
+    void EnemyHurt()
     {
 
     }

@@ -4,15 +4,27 @@ using UnityEngine;
 
 public class CoalTower : Tower
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] Transform leftPoint;
+    [SerializeField] Transform rightPoint;
+    [SerializeField] GameObject coalPrefab;
 
-    // Update is called once per frame
-    void Update()
+    [SerializeField] float fireInterval = 3f;
+    private float currentFireTime;
+    private void Start()
     {
-        
+        currentFireTime = fireInterval;
+    }
+    private void Update()
+    {
+        currentFireTime -= Time.deltaTime;
+
+        if(currentFireTime <= 0f)
+        {
+            Instantiate(coalPrefab, leftPoint.position, leftPoint.localRotation);
+            Instantiate(coalPrefab, rightPoint.position, rightPoint.localRotation);
+            currentFireTime = fireInterval;
+        }
+            
+       
     }
 }

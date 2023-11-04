@@ -1,17 +1,17 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Arrow : MonoBehaviour
+public class Coal : MonoBehaviour
 {
-    [SerializeField] int damage;
     [SerializeField] float speed;
+    [SerializeField] int damage;
 
 
-    private void Update()
+
+    void Update()
     {
-        transform.position += Vector3.down * speed * Time.deltaTime;
+        transform.position += transform.up * speed * Time.deltaTime;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -22,6 +22,7 @@ public class Arrow : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
     private void OnBecameInvisible()
     {
         Destroy(gameObject);
