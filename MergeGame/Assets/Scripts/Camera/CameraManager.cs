@@ -8,6 +8,8 @@ public class CameraManager : MonoBehaviour
 
     private void Start()
     {
-        gameObject.transform.position = _gridManager._floorGrid.GetCenterPosition();
+        Vector3 centerPosition = _gridManager._floorGrid.GetCenterPosition();
+        centerPosition.z = gameObject.transform.position.z;
+        gameObject.transform.position = centerPosition;
     }
 }

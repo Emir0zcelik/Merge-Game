@@ -48,19 +48,26 @@ public class GridManager : MonoBehaviour
 
     private void Update()
     {
-        Vector3 cameraOffset = new Vector3(0, 0, (new Vector3(0, 0, 0) - _camera.transform.position).magnitude);
+        if(Input.GetMouseButtonDown(0))
+        {
+            Plane plane = new Plane(-Vector3.forward, Vector3.zero);
 
-        Vector3 worldPoint = _camera.ScreenToWorldPoint(Input.mousePosition + cameraOffset);
-        Vector2Int gridPosition = _floorGrid.WorldToGridPosition(worldPoint);
+            Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
 
+            if (plane.Raycast(ray, out float distance))
+            {
+                Vector3 hitpoint = ray.GetPoint(distance);
 
+                Vector2Int gridPosition = _floorGrid.WorldToGridPosition(hitpoint);
 
-
+                Debug.Log(gridPosition);
+            }
+        }
     }
 
     private void InitizalizeGrid()
     {
-        _floorGrid = new Grid<FloorTile>(new FloorTile[6, 6], 3);
+        _floorGrid = new Grid<FloorTile>(new FloorTile[6, 6], 1);
 
         FloorTile floorTile = new FloorTile();
     }
