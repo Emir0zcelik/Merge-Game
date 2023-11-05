@@ -10,7 +10,6 @@ public class GridManager : MonoBehaviour
     [SerializeField] private Camera _camera;
 
     [SerializeField] private GameObject _tileBackground;
-    [SerializeField] private GameObject _debugTileData;
 
     [SerializeField] private Color orginalColor;
     [SerializeField] private Color offSetColor;
@@ -18,10 +17,7 @@ public class GridManager : MonoBehaviour
     private void Awake()
     {
         InitizalizeGrid();
-    }
 
-    private void Start()
-    {
         for (int x = 0; x < _floorGrid._grid.GetLength(0); x++)
         {
             for (int y = 0; y < _floorGrid._grid.GetLength(1); y++)
@@ -44,6 +40,14 @@ public class GridManager : MonoBehaviour
                 _floorGrid._grid[x, y].TileBackground = background;
             }
         }
+
+
+    }
+
+    private void Start()
+    {
+        
+
     }
 
     private void Update()
@@ -56,11 +60,11 @@ public class GridManager : MonoBehaviour
 
             if (plane.Raycast(ray, out float distance))
             {
-                Vector3 hitpoint = ray.GetPoint(distance);
+                Vector3 worldPosition = ray.GetPoint(distance);
 
-                Vector2Int gridPosition = _floorGrid.WorldToGridPosition(hitpoint);
+                Vector2Int gridPosition = _floorGrid.WorldToGridPosition(worldPosition);
 
-                Debug.Log(gridPosition);
+
             }
         }
     }

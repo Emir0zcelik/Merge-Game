@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Coal : MonoBehaviour
+public class Coal : Tower
 {
     [SerializeField] float speed;
     [SerializeField] int damage;
