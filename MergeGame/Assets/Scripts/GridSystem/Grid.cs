@@ -29,7 +29,7 @@ public class Grid<T>
 
     public Vector3 GridToWorldPosition(Vector2Int gridPosition)
     {
-        return new Vector3(gridPosition.x, gridPosition.y) * _cellSize;
+        return (new Vector3(gridPosition.x, gridPosition.y) * _cellSize) + (Vector3)(Vector2.one * _cellSize / 2);
     }
 
     public Vector2Int WorldToGridPosition(Vector3 worldPosition)
