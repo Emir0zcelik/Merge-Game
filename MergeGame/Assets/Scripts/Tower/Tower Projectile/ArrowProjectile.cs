@@ -1,17 +1,17 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Coal : Tower
+public class ArrowProjectile : MonoBehaviour
 {
-    [SerializeField] float speed;
     [SerializeField] int damage;
+    [SerializeField] float speed;
 
 
-
-    void Update()
+    private void Update()
     {
-        transform.position += transform.up * speed * Time.deltaTime;
+        transform.position += Vector3.down * speed * Time.deltaTime;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -22,7 +22,6 @@ public class Coal : Tower
             Destroy(gameObject);
         }
     }
-
     private void OnBecameInvisible()
     {
         Destroy(gameObject);

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Stone : Tower
+public class StoneRotate : MonoBehaviour
 {
     [SerializeField] float speed;
 
