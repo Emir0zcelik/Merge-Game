@@ -14,6 +14,9 @@ public class GridManager : MonoBehaviour
     [SerializeField] private Color orginalColor;
     [SerializeField] private Color offSetColor;
 
+    private Vector2Int firstTowerPosition;
+    private Vector2Int secondTowerPosition;
+
     private void Awake()
     {
         InitizalizeGrid();
@@ -64,7 +67,23 @@ public class GridManager : MonoBehaviour
 
                 Vector2Int gridPosition = _floorGrid.WorldToGridPosition(worldPosition);
 
+                firstTowerPosition = gridPosition;
+            }
+        }
 
+        if (Input.GetMouseButtonUp(0))
+        {
+            Plane plane = new Plane(-Vector3.forward, Vector3.zero);
+
+            Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
+
+            if (plane.Raycast(ray, out float distance))
+            {
+                Vector3 worldPosition = ray.GetPoint(distance);
+
+                Vector2Int gridPosition = _floorGrid.WorldToGridPosition(worldPosition);
+
+                SwapTower(firstTowerPosition, gridPosition);
             }
         }
     }
@@ -74,5 +93,18 @@ public class GridManager : MonoBehaviour
         _floorGrid = new Grid<FloorTile>(new FloorTile[6, 6], 1);
 
         FloorTile floorTile = new FloorTile();
+    }
+
+    private void SwapTower(Vector2Int first, Vector2Int second)
+    {
+        FloorTile tempTile;
+
+        tempTile = _floorGrid._grid[first.x, first.y];
+        _floorGrid._grid[first.x, first.y] = _floorGrid._grid[second.x, second.y];
+        _floorGrid._grid[second.x, second.y] = tempTile;
+
+
+        _floorGrid._grid[first.x, first.y].Tower.transform.position = _floorGrid.GridToWorldPosition(first);
+        _floorGrid._grid[second.x, second.y].Tower.transform.position = _floorGrid.GridToWorldPosition(second);
     }
 }

@@ -7,6 +7,7 @@ public struct FloorTile
 {
     public GameObject TileBackground;
 
+    public Tower Tower;
 }
 
 

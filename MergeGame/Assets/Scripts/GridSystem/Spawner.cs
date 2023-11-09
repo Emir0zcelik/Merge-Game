@@ -14,8 +14,6 @@ public class Spawner : MonoBehaviour
         GridManager manager = GetComponent<GridManager>();
         Grid<FloorTile> _floorGrid = manager._floorGrid;
 
-
-
         for (int x = 0; x < _floorGrid._grid.GetLength(0); x++)
         {
             for (int y = 0; y < _floorGrid._grid.GetLength(1); y++)
@@ -25,6 +23,12 @@ public class Spawner : MonoBehaviour
                 int random = Random.Range(0, _towerPrefabList.Count);
 
                 Tower tower = Instantiate(_towerPrefabList[random], _floorGrid.GridToWorldPosition(gridPosition), Quaternion.identity);
+
+                _floorGrid._grid[x,y] = new FloorTile 
+                {
+                    Tower = tower, 
+                    TileBackground = _floorGrid._grid[x,y].TileBackground
+                };
 
             }
         }
