@@ -8,6 +8,8 @@ public struct FloorTile
     public GameObject TileBackground;
 
     public Tower Tower;
+
+    public TowerType TowerType;
 }
 
 

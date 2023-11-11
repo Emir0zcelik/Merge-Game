@@ -5,8 +5,6 @@ using UnityEngine.UIElements;
 
 public class Spawner : MonoBehaviour
 {
-    [SerializeField] private Tower _tower;
-
     [SerializeField] private List<Tower> _towerPrefabList;
 
     public void Start()
@@ -24,10 +22,12 @@ public class Spawner : MonoBehaviour
 
                 Tower tower = Instantiate(_towerPrefabList[random], _floorGrid.GridToWorldPosition(gridPosition), Quaternion.identity);
 
+                tower.towerType = (TowerType)random + 1;
+
                 _floorGrid._grid[x,y] = new FloorTile 
                 {
                     Tower = tower, 
-                    TileBackground = _floorGrid._grid[x,y].TileBackground
+                    TileBackground = _floorGrid._grid[x,y].TileBackground,
                 };
 
             }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class GridManager : MonoBehaviour
 {
@@ -15,7 +16,6 @@ public class GridManager : MonoBehaviour
     [SerializeField] private Color offSetColor;
 
     private Vector2Int firstTowerPosition;
-    private Vector2Int secondTowerPosition;
 
     private void Awake()
     {
@@ -43,8 +43,6 @@ public class GridManager : MonoBehaviour
                 _floorGrid._grid[x, y].TileBackground = background;
             }
         }
-
-
     }
 
     private void Start()
@@ -83,8 +81,21 @@ public class GridManager : MonoBehaviour
 
                 Vector2Int gridPosition = _floorGrid.WorldToGridPosition(worldPosition);
 
-                SwapTower(firstTowerPosition, gridPosition);
+                Vector2Int gridDifference = gridPosition - firstTowerPosition;
+
+                
+
+                if (VectorExtension.GetVector2IntSize(gridDifference) < 2)
+                {
+                    SwapTower(firstTowerPosition, gridPosition);
+                }
+                
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space)) 
+        { 
+            MatchThreeTile();
         }
     }
 
@@ -107,4 +118,69 @@ public class GridManager : MonoBehaviour
         _floorGrid._grid[first.x, first.y].Tower.transform.position = _floorGrid.GridToWorldPosition(first);
         _floorGrid._grid[second.x, second.y].Tower.transform.position = _floorGrid.GridToWorldPosition(second);
     }
+
+    public void MatchThreeTile()
+    {
+        for (int x = 0; x < _floorGrid._grid.GetLength(0); x++)
+        {
+            for (int y = 0; y < _floorGrid._grid.GetLength(1); y++)
+            {
+                GetNeighboor(x, y, _floorGrid._grid[x,y].Tower, out List<Vector2Int> foundGridPositionsX, out List<Vector2Int> foundGridPositionsY);
+
+                if (foundGridPositionsX.Count >= 2)
+                {
+                    Debug.Log(x + "" + y + "MatchX");
+
+                }
+
+                if (foundGridPositionsY.Count >= 2)
+                {
+                    Debug.Log(x + "" + y + "MatchY");
+                }
+            }
+        }
+    }
+
+    void GetNeighboor(int x, int y, Tower targetTower, out List<Vector2Int> foundGridPositionsX, out List<Vector2Int> foundGridPositionsY)
+    {
+        int currentX = x + 1;
+        int currentY = y + 1;
+
+        foundGridPositionsX = new List<Vector2Int>();
+        foundGridPositionsY = new List<Vector2Int>();
+
+
+        while (_floorGrid.IsValidGridPosition(currentX, y) && _floorGrid._grid[currentX, y].Tower.towerType == targetTower.towerType) 
+        {
+            foundGridPositionsX.Add(new Vector2Int(currentX, y));
+            currentX++;
+        }
+
+        currentX = x - 1;
+
+        while (_floorGrid.IsValidGridPosition(currentX, y) && _floorGrid._grid[currentX, y].Tower.towerType == targetTower.towerType)
+        {
+            foundGridPositionsX.Add(new Vector2Int(currentX, y));
+            currentX--;
+        }
+
+
+        while (_floorGrid.IsValidGridPosition(x, currentY) && _floorGrid._grid[x, currentY].Tower.towerType == targetTower.towerType)
+        {
+            foundGridPositionsY.Add(new Vector2Int(x, currentY));
+            currentY++;
+        }
+
+        currentY = y - 1;
+
+        while (_floorGrid.IsValidGridPosition(x, currentY) && _floorGrid._grid[x, currentY].Tower.towerType == targetTower.towerType)
+        {
+            foundGridPositionsY.Add(new Vector2Int(x, currentY));
+            currentY--;
+        }
+    
+
+
+    }
 }
+  
