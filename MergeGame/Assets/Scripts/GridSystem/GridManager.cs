@@ -79,7 +79,7 @@ public class GridManager : MonoBehaviour
 
                 Vector2Int gridDifference = gridPosition - firstTowerPosition;
 
-                if (VectorExtension.GetVector2IntSize(gridDifference) < 2 && _floorGrid._grid[firstTowerPosition.x, firstTowerPosition.y].Tower.towerType != TowerType.Empty && _floorGrid._grid[gridPosition.x, gridPosition.y].Tower.towerType != TowerType.Empty)
+                if (VectorExtension.GetVector2IntSize(gridDifference) < 2 && _floorGrid._grid[firstTowerPosition.x, firstTowerPosition.y].Tower != null && _floorGrid._grid[gridPosition.x, gridPosition.y].Tower != null)
                 {
                     SwapTower(firstTowerPosition, gridPosition);
                 }
@@ -92,7 +92,6 @@ public class GridManager : MonoBehaviour
 
             for (int i = 0; i < matchedXnY.Count; i++)
             {
-
                 if (_floorGrid._grid[matchedXnY[i].x, matchedXnY[i].y].Tower == null)
                 {
                     continue;
@@ -101,6 +100,7 @@ public class GridManager : MonoBehaviour
                 Destroy(_floorGrid._grid[matchedXnY[i].x, matchedXnY[i].y].Tower.gameObject);
                 _floorGrid.SetItem(matchedXnY[i], new FloorTile());
             }
+            matchedXnY.Clear();
         }
     }
 
@@ -162,7 +162,7 @@ public class GridManager : MonoBehaviour
 
         currentX = x - 1;
 
-        while (x > 0 && currentX > 0 && _floorGrid._grid[currentX, y].Tower != null && _floorGrid.IsValidGridPosition(currentX, y) && _floorGrid._grid[currentX, y].Tower.towerType == targetTower.towerType)
+        while (x > 0 && currentX >= 0 && _floorGrid._grid[currentX, y].Tower != null && _floorGrid.IsValidGridPosition(currentX, y) && _floorGrid._grid[currentX, y].Tower.towerType == targetTower.towerType)
         {
             countX++;
             currentX--;
@@ -178,7 +178,7 @@ public class GridManager : MonoBehaviour
         }
 
         currentY = y - 1;
-        while (y > 0 && currentY > 0 && _floorGrid._grid[x, currentY].Tower != null && _floorGrid.IsValidGridPosition(x, currentY) && _floorGrid._grid[x, currentY].Tower.towerType == targetTower.towerType)
+        while (y > 0 && currentY >= 0 && _floorGrid._grid[x, currentY].Tower != null && _floorGrid.IsValidGridPosition(x, currentY) && _floorGrid._grid[x, currentY].Tower.towerType == targetTower.towerType)
         {
             countY++;
             currentY--;
