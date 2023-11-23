@@ -17,10 +17,14 @@ public class GridManager : MonoBehaviour
     [SerializeField] private Color orginalColor;
     [SerializeField] private Color offSetColor;
 
+    private Spawner _spawner;
+
     private Vector2Int firstTowerPosition;
 
     private void Awake()
     {
+        _spawner = GetComponent<Spawner>();
+
         InitizalizeGrid();
 
         for (int x = 0; x < _floorGrid._grid.GetLength(0); x++)
@@ -100,6 +104,9 @@ public class GridManager : MonoBehaviour
                 Destroy(_floorGrid._grid[matchedXnY[i].x, matchedXnY[i].y].Tower.gameObject);
                 _floorGrid.SetItem(matchedXnY[i], new FloorTile());
             }
+
+            _spawner.Spawn(matchedXnY);
+
             matchedXnY.Clear();
         }
     }
