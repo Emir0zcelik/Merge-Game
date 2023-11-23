@@ -47,12 +47,6 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-
-
-    }
-
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -85,7 +79,7 @@ public class GridManager : MonoBehaviour
 
                 Vector2Int gridDifference = gridPosition - firstTowerPosition;
 
-                if (VectorExtension.GetVector2IntSize(gridDifference) < 2)
+                if (VectorExtension.GetVector2IntSize(gridDifference) < 2 && _floorGrid._grid[firstTowerPosition.x, firstTowerPosition.y].Tower.towerType != TowerType.Empty && _floorGrid._grid[gridPosition.x, gridPosition.y].Tower.towerType != TowerType.Empty)
                 {
                     SwapTower(firstTowerPosition, gridPosition);
                 }
@@ -150,9 +144,6 @@ public class GridManager : MonoBehaviour
             }
         }
     }
-
-
-    // TODO CurrentX ve CurrentY degerleri _floorGrid._grid[] arrayinin indexini asabiliyor buna bir cozum bul.
 
     void GetNeighboor(int x, int y, Tower targetTower, out int countX, out int countY)
     {
