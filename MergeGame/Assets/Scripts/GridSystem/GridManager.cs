@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static UnityEditor.Progress;
 
 public class GridManager : MonoBehaviour
 {
@@ -47,13 +49,13 @@ public class GridManager : MonoBehaviour
 
     private void Start()
     {
-        
+
 
     }
 
     private void Update()
     {
-        if(Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
         {
             Plane plane = new Plane(-Vector3.forward, Vector3.zero);
 
@@ -83,19 +85,28 @@ public class GridManager : MonoBehaviour
 
                 Vector2Int gridDifference = gridPosition - firstTowerPosition;
 
-                
-
                 if (VectorExtension.GetVector2IntSize(gridDifference) < 2)
                 {
                     SwapTower(firstTowerPosition, gridPosition);
                 }
-                
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Space)) 
-        { 
-            MatchThreeTile();
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            GetMatches(out List<Vector2Int> matchedXnY);
+
+            for (int i = 0; i < matchedXnY.Count; i++)
+            {
+
+                if (_floorGrid._grid[matchedXnY[i].x, matchedXnY[i].y].Tower == null)
+                {
+                    continue;
+                }
+
+                Destroy(_floorGrid._grid[matchedXnY[i].x, matchedXnY[i].y].Tower.gameObject);
+                _floorGrid.SetItem(matchedXnY[i], new FloorTile());
+            }
         }
     }
 
@@ -119,68 +130,67 @@ public class GridManager : MonoBehaviour
         _floorGrid._grid[second.x, second.y].Tower.transform.position = _floorGrid.GridToWorldPosition(second);
     }
 
-    public void MatchThreeTile()
+    public void GetMatches(out List<Vector2Int> matchedXnY)
     {
+        matchedXnY = new List<Vector2Int>();
+
         for (int x = 0; x < _floorGrid._grid.GetLength(0); x++)
         {
             for (int y = 0; y < _floorGrid._grid.GetLength(1); y++)
             {
-                GetNeighboor(x, y, _floorGrid._grid[x,y].Tower, out List<Vector2Int> foundGridPositionsX, out List<Vector2Int> foundGridPositionsY);
-
-                if (foundGridPositionsX.Count >= 2)
+                if (_floorGrid._grid[x,y].Tower != null)
                 {
-                    Debug.Log(x + "" + y + "MatchX");
+                    GetNeighboor(x, y, _floorGrid._grid[x, y].Tower, out int countX, out int countY);
 
-                }
-
-                if (foundGridPositionsY.Count >= 2)
-                {
-                    Debug.Log(x + "" + y + "MatchY");
+                    if (countX >= 2 || countY >= 2)
+                    {
+                        matchedXnY.Add(new Vector2Int(x, y));
+                    }
                 }
             }
         }
     }
 
-    void GetNeighboor(int x, int y, Tower targetTower, out List<Vector2Int> foundGridPositionsX, out List<Vector2Int> foundGridPositionsY)
+
+    // TODO CurrentX ve CurrentY degerleri _floorGrid._grid[] arrayinin indexini asabiliyor buna bir cozum bul.
+
+    void GetNeighboor(int x, int y, Tower targetTower, out int countX, out int countY)
     {
         int currentX = x + 1;
         int currentY = y + 1;
 
-        foundGridPositionsX = new List<Vector2Int>();
-        foundGridPositionsY = new List<Vector2Int>();
+        countX = 0;
+        countY = 0;
 
-
-        while (_floorGrid.IsValidGridPosition(currentX, y) && _floorGrid._grid[currentX, y].Tower.towerType == targetTower.towerType) 
+        while (x < _floorGrid._grid.GetLength(0) && currentX < _floorGrid._grid.GetLength(0)  && _floorGrid._grid[currentX, y].Tower != null && _floorGrid.IsValidGridPosition(currentX, y) && _floorGrid._grid[currentX, y].Tower.towerType == targetTower.towerType)
         {
-            foundGridPositionsX.Add(new Vector2Int(currentX, y));
+            countX++;
             currentX++;
         }
 
+
         currentX = x - 1;
 
-        while (_floorGrid.IsValidGridPosition(currentX, y) && _floorGrid._grid[currentX, y].Tower.towerType == targetTower.towerType)
+        while (x > 0 && currentX > 0 && _floorGrid._grid[currentX, y].Tower != null && _floorGrid.IsValidGridPosition(currentX, y) && _floorGrid._grid[currentX, y].Tower.towerType == targetTower.towerType)
         {
-            foundGridPositionsX.Add(new Vector2Int(currentX, y));
+            countX++;
             currentX--;
+            if (currentX < 0)
+                break;
         }
+        
 
-
-        while (_floorGrid.IsValidGridPosition(x, currentY) && _floorGrid._grid[x, currentY].Tower.towerType == targetTower.towerType)
+        while (y < _floorGrid._grid.GetLength(1) && currentY < _floorGrid._grid.GetLength(1) && _floorGrid._grid[x, currentY].Tower != null && _floorGrid.IsValidGridPosition(x, currentY) && _floorGrid._grid[x, currentY].Tower.towerType == targetTower.towerType)
         {
-            foundGridPositionsY.Add(new Vector2Int(x, currentY));
+            countY++; 
             currentY++;
         }
 
         currentY = y - 1;
-
-        while (_floorGrid.IsValidGridPosition(x, currentY) && _floorGrid._grid[x, currentY].Tower.towerType == targetTower.towerType)
+        while (y > 0 && currentY > 0 && _floorGrid._grid[x, currentY].Tower != null && _floorGrid.IsValidGridPosition(x, currentY) && _floorGrid._grid[x, currentY].Tower.towerType == targetTower.towerType)
         {
-            foundGridPositionsY.Add(new Vector2Int(x, currentY));
+            countY++;
             currentY--;
         }
-    
-
-
     }
 }
-  

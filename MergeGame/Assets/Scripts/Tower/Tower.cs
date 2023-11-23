@@ -19,12 +19,12 @@ public class Tower : MonoBehaviour
 
 
 
-    public virtual void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, attackRange);
-        GetComponent<SphereCollider>().radius = attackRange;
-    }
+    //public virtual void OnDrawGizmosSelected()
+    //{
+    //    Gizmos.color = Color.blue;
+    //    Gizmos.DrawWireSphere(transform.position, attackRange);
+    //    GetComponent<SphereCollider>().radius = attackRange;
+    //}
 
 
 }

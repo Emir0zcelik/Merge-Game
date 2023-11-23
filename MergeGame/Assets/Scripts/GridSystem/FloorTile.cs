@@ -10,6 +10,7 @@ public struct FloorTile
     public Tower Tower;
 
     public TowerType TowerType;
+
 }
 
 
