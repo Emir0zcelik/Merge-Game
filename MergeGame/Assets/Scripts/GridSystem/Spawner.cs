@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using DG.Tweening;
 
 public class Spawner : MonoBehaviour
 {
@@ -26,6 +27,10 @@ public class Spawner : MonoBehaviour
                 Tower tower = Instantiate(_towerPrefabList[random], _floorGrid.GridToWorldPosition(gridPosition), Quaternion.identity);
 
                 tower.towerType = (TowerType)random + 1;
+
+                tower.transform.localScale = Vector3.zero;
+
+                tower.transform.DOScale(new Vector3(1, 1, 1), 1f);
 
                 _floorGrid._grid[x,y] = new FloorTile 
                 {
@@ -54,6 +59,10 @@ public class Spawner : MonoBehaviour
                         Tower tower = Instantiate(_towerPrefabList[random], _floorGrid.GridToWorldPosition(gridPosition), Quaternion.identity);
 
                         tower.towerType = (TowerType)random + 1;
+
+                        tower.transform.localScale = Vector3.zero;
+
+                        tower.transform.DOScale(new Vector3(1, 1, 1), 1f);
 
                         _floorGrid._grid[x, y] = new FloorTile
                         {
