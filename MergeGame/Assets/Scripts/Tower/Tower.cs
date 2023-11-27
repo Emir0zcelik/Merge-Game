@@ -14,6 +14,7 @@ public class Tower : MonoBehaviour
     [SerializeField] protected float attackRange;
 
     public TowerType towerType;
+    public int towerLevel;
 
 
 
