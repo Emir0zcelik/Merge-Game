@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -25,6 +26,8 @@ public class GridManager : MonoBehaviour
     private Vector2Int lastTowerPosition;
     private TowerType lastTowerType;
 
+    public Action destroyedEvent;
+
 
     private void Awake()
     {
@@ -39,17 +42,7 @@ public class GridManager : MonoBehaviour
                 Vector3 worldPosition = _floorGrid.GridToWorldPosition(new Vector2Int(x, y));
 
                 GameObject background = Instantiate(_tileBackground, worldPosition, Quaternion.identity);
-
-                var spriteRenderer = background.GetComponent<SpriteRenderer>();
-
-                if ((x % 2 == 0 && y % 2 != 0) || (x % 2 != 0 && y % 2 == 0))
-                {
-                    spriteRenderer.color = orginalColor;
-                }
-                else
-                {
-                    spriteRenderer.color = offSetColor;
-                }
+                
 
                 _floorGrid._grid[x, y].TileBackground = background;
             }
@@ -155,7 +148,9 @@ public class GridManager : MonoBehaviour
             _floorGrid.SetItem(matchedXnY[i], new FloorTile());
         }
 
-        _spawner.Spawn(matchedXnY, lastTowerPosition, lastTowerType);
+        _spawner.TrySpawn(lastTowerType, 1,lastTowerPosition, out Tower tower);
+        
+        destroyedEvent.Invoke();
 
         matchedXnY.Clear();
     }
@@ -183,38 +178,35 @@ public class GridManager : MonoBehaviour
 
     void GetNeighboor(int x, int y, Tower targetTower, out int countX, out int countY)
     {
-        int currentX = x + 1;
-        int currentY = y + 1;
+        int currentX = 0;
+        int currentY = 0;
 
         countX = 0;
         countY = 0;
-
-        while (x < _floorGrid._grid.GetLength(0) && currentX < _floorGrid._grid.GetLength(0)  && _floorGrid._grid[currentX, y].Tower != null && _floorGrid.IsValidGridPosition(currentX, y) && _floorGrid._grid[currentX, y].Tower.towerType == targetTower.towerType && _floorGrid._grid[currentX, y].Tower.towerLevel == targetTower.towerLevel)
+        
+        currentX = x + 1;
+        while (_floorGrid.IsInDimensions(currentX,y)  && _floorGrid._grid[currentX, y].Tower != null && _floorGrid._grid[currentX, y].Tower.IsEquals(targetTower))
         {
             countX++;
             currentX++;
         }
-
-
+        
         currentX = x - 1;
-
-        while (x > 0 && currentX >= 0 && _floorGrid._grid[currentX, y].Tower != null && _floorGrid.IsValidGridPosition(currentX, y) && _floorGrid._grid[currentX, y].Tower.towerType == targetTower.towerType && _floorGrid._grid[currentX, y].Tower.towerLevel == targetTower.towerLevel)
+        while (_floorGrid.IsInDimensions(currentX,y)  && _floorGrid._grid[currentX, y].Tower != null && _floorGrid._grid[currentX, y].Tower.IsEquals(targetTower))
         {
             countX++;
             currentX--;
-            if (currentX < 0)
-                break;
         }
-        
 
-        while (y < _floorGrid._grid.GetLength(1) && currentY < _floorGrid._grid.GetLength(1) && _floorGrid._grid[x, currentY].Tower != null && _floorGrid.IsValidGridPosition(x, currentY) && _floorGrid._grid[x, currentY].Tower.towerType == targetTower.towerType && _floorGrid._grid[x, currentY].Tower.towerLevel == targetTower.towerLevel)
+        currentY = y + 1;
+        while (_floorGrid.IsInDimensions(x,currentY)  && _floorGrid._grid[x,currentY].Tower != null && _floorGrid._grid[x,currentY].Tower.IsEquals(targetTower))
         {
             countY++; 
             currentY++;
         }
 
         currentY = y - 1;
-        while (y > 0 && currentY >= 0 && _floorGrid._grid[x, currentY].Tower != null && _floorGrid.IsValidGridPosition(x, currentY) && _floorGrid._grid[x, currentY].Tower.towerType == targetTower.towerType && _floorGrid._grid[x, currentY].Tower.towerLevel == targetTower.towerLevel)
+        while (_floorGrid.IsInDimensions(x,currentY)  && _floorGrid._grid[x,currentY].Tower != null && _floorGrid._grid[x,currentY].Tower.IsEquals(targetTower))
         {
             countY++;
             currentY--;

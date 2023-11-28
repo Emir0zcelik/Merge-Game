@@ -17,7 +17,16 @@ public class Tower : MonoBehaviour
     public int towerLevel;
 
 
+    public bool IsEquals(Tower tower)
+    {
+        if (tower.towerType != towerType)
+            return false;
 
+        if (tower.towerLevel != towerLevel)
+            return false;
+
+        return true;
+    }
 
 
     //public virtual void OnDrawGizmosSelected()

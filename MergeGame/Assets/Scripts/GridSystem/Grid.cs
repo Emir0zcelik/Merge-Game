@@ -45,7 +45,7 @@ public class Grid<T>
         return new Vector3(_grid.GetLength(0) * _cellSize * 0.5f, _grid.GetLength(1) * _cellSize * 0.5f, 0);
     }
 
-    public bool IsValidGridPosition(int x, int y)
+    public bool IsInDimensions(int x, int y)
     {
         return x >= 0 && x < _grid.GetLength(0) && y >= 0 && y < _grid.GetLength(1);
     }
