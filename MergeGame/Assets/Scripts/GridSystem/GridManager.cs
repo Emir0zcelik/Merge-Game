@@ -5,7 +5,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static UnityEditor.Progress;
+using DG.Tweening;
 
 public class GridManager : MonoBehaviour
 {
@@ -20,11 +20,9 @@ public class GridManager : MonoBehaviour
 
     private Spawner _spawner;
 
-    private bool isDestroy = false;
-
-    private Vector2Int firstTowerPosition;
-    private Vector2Int lastTowerPosition;
-    private TowerType lastTowerType;
+    public Vector2Int firstTowerPosition;
+    public Vector2Int lastTowerPosition;
+    public TowerType lastTowerType;
 
     public Action destroyedEvent;
 
@@ -43,61 +41,15 @@ public class GridManager : MonoBehaviour
 
                 GameObject background = Instantiate(_tileBackground, worldPosition, Quaternion.identity);
                 
-
                 _floorGrid._grid[x, y].TileBackground = background;
             }
         }
     }
 
-    private void Start()
-    {
-        CheckMatches();
-    }
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            Plane plane = new Plane(-Vector3.forward, Vector3.zero);
-
-            Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
-
-            if (plane.Raycast(ray, out float distance))
-            {
-                Vector3 worldPosition = ray.GetPoint(distance);
-
-                Vector2Int gridPosition = _floorGrid.WorldToGridPosition(worldPosition);
-
-                firstTowerPosition = gridPosition;
-            }
-        }
-
-        if (Input.GetMouseButtonUp(0))
-        {
-            Plane plane = new Plane(-Vector3.forward, Vector3.zero);
-
-            Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
-
-            if (plane.Raycast(ray, out float distance))
-            {
-                Vector3 worldPosition = ray.GetPoint(distance);
-
-                Vector2Int gridPosition = _floorGrid.WorldToGridPosition(worldPosition);
-
-                Vector2Int gridDifference = gridPosition - firstTowerPosition;
-
-                lastTowerPosition = gridPosition;
-
-                lastTowerType = _floorGrid._grid[firstTowerPosition.x, firstTowerPosition.y].Tower.towerType;
-
-                if (VectorExtension.GetVector2IntSize(gridDifference) < 2 && _floorGrid._grid[firstTowerPosition.x, firstTowerPosition.y].Tower != null && _floorGrid._grid[gridPosition.x, gridPosition.y].Tower != null)
-                {
-                    SwapTower(firstTowerPosition, gridPosition);
-
-                    CheckMatches();
-                }
-            }
-        }
+        CheckMatches();
     }
 
     private void InitizalizeGrid()
@@ -107,7 +59,7 @@ public class GridManager : MonoBehaviour
         FloorTile floorTile = new FloorTile();
     }
 
-    private void SwapTower(Vector2Int first, Vector2Int second)
+    public void SwapTower(Vector2Int first, Vector2Int second)
     {
         FloorTile tempTile;
 
@@ -120,11 +72,9 @@ public class GridManager : MonoBehaviour
         _floorGrid._grid[second.x, second.y].Tower.transform.position = _floorGrid.GridToWorldPosition(second);
     }
 
-    void CheckMatches()
+    public void CheckMatches()
     {
         GetMatches(out List<Vector2Int> matchedXnY);
-
-        print("matchedXnY.count: " + matchedXnY.Count);
 
         if (matchedXnY.Count <= 0)
         {
@@ -143,7 +93,6 @@ public class GridManager : MonoBehaviour
                 continue;
             }
 
-            //print(_floorGrid._grid[matchedXnY[i].x + matchedXnY[i].y)
             Destroy(_floorGrid._grid[matchedXnY[i].x, matchedXnY[i].y].Tower.gameObject);
             _floorGrid.SetItem(matchedXnY[i], new FloorTile());
         }

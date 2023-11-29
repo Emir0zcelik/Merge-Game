@@ -14,12 +14,12 @@ public class Spawner : MonoBehaviour
     Action tileSpawnedEvent;
 
 
+
     private void Awake()
     {
         gridManager = GetComponent<GridManager>();
         _floorGrid = gridManager._floorGrid;
         FillEmptyTiles();
-
     }
 
     private void OnEnable()
@@ -58,8 +58,11 @@ public class Spawner : MonoBehaviour
                 Tower = instantiatedTower,
                 TileBackground = _floorGrid._grid[gridPosition.x, gridPosition.y].TileBackground,
             };
-            
+
             instantiatedTower.transform.position = _floorGrid.GridToWorldPosition(gridPosition);
+            instantiatedTower.transform.localScale = Vector3.zero;
+            instantiatedTower.transform.DORotate(new Vector3(-180f, 360f, 360f), 1f);
+            instantiatedTower.transform.DOScale(new Vector3(1f, 1f, 1f), 1f);
 
             return true;
         }
